@@ -5,6 +5,7 @@ from django.views.generic import DetailView, TemplateView, CreateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import FormMixin, ProcessFormView, FormView
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 import pymongo
 from bson.objectid import ObjectId
@@ -20,7 +21,7 @@ from . import models, forms
 
 #class ErrorHandlerMixin(object):
 
-
+@login_required
 class ConnectView(CreateView):
     form_class = forms.ConnectForm
     template_name = 'mongoadmin/connect.html'
@@ -45,7 +46,7 @@ class ConnectView(CreateView):
         else:
             return HttpResponseRedirect(self.success_url)
 
-
+@login_required
 class ConnectionDetailMixin(object):
     model = models.MongoConnection
 
@@ -77,6 +78,7 @@ class ConnectionDetailMixin(object):
             if 'collection_name' in self.kwargs:
                 self.collection = self.database[self.kwargs['collection_name']]
 
+@login_required
 class ConnectionView(ConnectionDetailMixin, TemplateView):
     template_name = 'mongoadmin/connection.html'
 
@@ -94,7 +96,7 @@ class ConnectionView(ConnectionDetailMixin, TemplateView):
         })
         return context
 
-
+@login_required
 class DatabaseView(ConnectionDetailMixin, TemplateView):
     template_name = 'mongoadmin/database.html'
 
@@ -113,7 +115,7 @@ class DatabaseView(ConnectionDetailMixin, TemplateView):
         })
         return context
 
-
+@login_required
 class CollectionView(ConnectionDetailMixin, TemplateView):
     template_name = 'mongoadmin/collection.html'
     per_page = 50
@@ -186,7 +188,7 @@ class CollectionView(ConnectionDetailMixin, TemplateView):
         })
         return context
 
-
+@login_required
 class BaseDocumentView(ConnectionDetailMixin):
     def get_document(self):
         document = self.collection.find_one({'_id': ObjectId(self.kwargs['pk'])})
@@ -212,7 +214,7 @@ class BaseDocumentView(ConnectionDetailMixin):
         })
         return context
 
-
+@login_required
 class UpdateDocumentView(BaseDocumentView, FormView):
     form_class = forms.DocumentForm
     template_name = 'mongoadmin/document.html'
@@ -242,7 +244,7 @@ class UpdateDocumentView(BaseDocumentView, FormView):
             'id': str(self.document['_id']),
         }
 
-
+@login_required
 class CreateDocumentView(UpdateDocumentView):
     def get_document(self):
         return None
@@ -253,6 +255,7 @@ class CreateDocumentView(UpdateDocumentView):
             'id': '',
         }
 
+@login_required
 class DeleteDocumentView(BaseDocumentView, TemplateView):
     template_name = 'mongoadmin/document_delete.html'
 
