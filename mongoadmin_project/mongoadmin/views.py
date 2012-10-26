@@ -246,7 +246,7 @@ class CreateDocumentView(UpdateDocumentView):
             'id': '',
         }
 
-@login_required
+
 class DeleteDocumentView(BaseDocumentView, TemplateView):
     template_name = 'mongoadmin/document_delete.html'
 
