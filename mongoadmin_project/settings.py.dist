@@ -4,7 +4,7 @@ import os
 BASE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ''))
 LIB_PATH = os.path.abspath(os.path.join(BASE_PATH, '..'))
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -15,9 +15,9 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'mongoadmin',                      # Or path to database file if using sqlite3.
-        'USER': 'root',                      # Not used with sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'mongoadmin.db',                      # Or path to database file if using sqlite3.
+        'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
@@ -85,20 +85,7 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-COMPRESS_JS_FILTERS = [
-    'compressor.filters.yui.YUIJSFilter',
-]
-
-COMPRESS_CSS_FILTERS = [
-    'compressor.filters.css_default.CssAbsoluteFilter',
-    'compressor.filters.cssmin.CSSMinFilter'
-]
-
-COMPRESS_PRECOMPILERS = (
-    ('text/less', 'lessc {infile} {outfile} --include-path=%s/common/static/less' % BASE_PATH),
-)
-
-COMPRESS_YUI_BINARY = 'java -jar %s/yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar' % LIB_PATH
+COMPRESS_ENABLED = False
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = ''
